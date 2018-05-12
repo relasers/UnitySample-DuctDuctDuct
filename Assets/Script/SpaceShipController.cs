@@ -10,6 +10,18 @@ public class SpaceShipController : MonoBehaviour {
     public Camera camera;
 
     public Quaternion Initalized_rotation;
+    public GameObject bullet;
+
+    bool canShoot = true;
+
+    IEnumerator ShootBullet(float delay)
+    {
+        ShootBullet();
+
+        canShoot = false;
+        yield return new WaitForSeconds(delay);
+        canShoot = true;
+    }
 
     // Use this for initialization
     void Start () {
@@ -41,14 +53,13 @@ public class SpaceShipController : MonoBehaviour {
         // 전 후진에 따라 카메라 fov 값을 조절해 시야를 변화시킨다.
         camera.fov = 60 - Mathf.Clamp(Input.GetAxis("Vertical") * 0.5f, -1, 1) * 20.0f;
 
+
+
     }
 
     // Update is called once per frame
     void Update () {
         
-
-       
-
 
         //////////////////////////////////////////////////////
         Ray ray;
@@ -62,7 +73,22 @@ public class SpaceShipController : MonoBehaviour {
             Debug.Log(hit.GetType());
            // transform.LookAt(hit.point);
         }
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            if (canShoot)
+            {
+                StartCoroutine(ShootBullet(1));
+            }
+        }
+
         
+
+    }
+
+    void ShootBullet()
+    {
+        GameObject newBullet = Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z) + transform.forward * 20, Quaternion.identity);
     }
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FloorSliderFowarder : MonoBehaviour {
 
-    float Floor_Scale_x;
+    float Floor_Scale_z;
     MeshRenderer renderer;
 
     // 0에서서 1까지 
@@ -12,7 +12,7 @@ public class FloorSliderFowarder : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Floor_Scale_x = Mathf.Abs(transform.position.x);
+        Floor_Scale_z = Mathf.Abs(transform.position.z)*2;
 
        //재질에 접근하기 위한 컴퍼넌트를 받아온다.
        renderer = GetComponent<MeshRenderer>();
@@ -48,9 +48,9 @@ public class FloorSliderFowarder : MonoBehaviour {
         transform.position =
             new Vector3
             (
-                calculatedvalue * Floor_Scale_x-1000,
+                transform.position.x,
                 transform.position.y,
-                transform.position.z
+                 calculatedvalue * Floor_Scale_z - 1000
                 );
     }
 }

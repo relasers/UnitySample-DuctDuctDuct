@@ -2,6 +2,7 @@
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
+		_NormalMap("Normal Map", 2D) = "bump" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
 	}
@@ -17,7 +18,7 @@
 		#pragma target 3.0
 
 		sampler2D _MainTex;
-
+		sampler2D _NormalMap;
 		struct Input {
 			float2 uv_MainTex;
 			// 카메라 뷰 벡터
@@ -36,9 +37,12 @@
 		UNITY_INSTANCING_CBUFFER_END
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
+			
 
-			float3 rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
-			rim = pow(rim, 3)/2;
+			//float3 rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
+			o.Normal = UnpackNormal(tex2D(_NormalMap, IN.uv_MainTex));
+			
+			//rim = pow(rim, 3);
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 
@@ -58,7 +62,7 @@
 			{
 				o.Emission = float3(c.r, c.g, sin(_Time.y*6));
 			}
-			o.Emission = o.Emission+rim;
+			//o.Emission = o.Emission;
 			
 		}
 		ENDCG

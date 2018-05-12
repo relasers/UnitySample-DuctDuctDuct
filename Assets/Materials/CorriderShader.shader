@@ -7,8 +7,8 @@
 	}
 	SubShader {
 		
-		//{ "RenderType" = "opaque" "Queue" = "opaque" }
-		Tags{ "RenderType" = "opaque" }
+		Tags{ "RenderType" = "opaque" "Queue" = "opaque" }
+		//Tags{ "RenderType" = "opaque" }
 		//cull off
 
 		LOD 200
@@ -65,7 +65,7 @@
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
-			o.Alpha = c.a;
+			//o.Alpha = c.a;
 			//o.Emission = c.b*rim*0.5;
 		}
 		ENDCG

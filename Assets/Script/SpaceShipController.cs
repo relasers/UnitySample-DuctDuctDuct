@@ -70,7 +70,7 @@ public class SpaceShipController : MonoBehaviour {
         // 플레이어를 제외한 모든 오브젝트에 대한 레이 캐스팅
         if (Physics.Raycast(ray, out hit, 20000,  -1 ))
         {
-            Debug.Log(hit.GetType());
+
            // transform.LookAt(hit.point);
         }
 
@@ -94,62 +94,19 @@ public class SpaceShipController : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
-      
-        // 벽에 부딫힌 상태면 색상을 변경하자.
-        if (collision.gameObject.tag == "SolidBlock")
-        {
-            rigidbody.isKinematic = true;
-            Material material = GetComponent<MeshRenderer>().material;
-            
-            GetComponent<MeshRenderer>().material.color
-                = new Color(1.0f,0.0f,0.0f,1.0f);
-        }
+       
     }
 
 
     private void OnCollisionStay(Collision collision)
     {
 
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
-
-        if (collision.gameObject.tag == "SolidBlock")
-        {
-            Material material = GetComponent<MeshRenderer>().material;
-
-            GetComponent<MeshRenderer>().material.color
-               = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-
-
-            // 접촉 지점을 찾아낸다.
-            ContactPoint contact;
-
-            if (collision.contacts.Length > 0)
-            {
-                contact = collision.contacts[0];
-
-                transform.position = contact.point + contact.normal * Time.deltaTime;
-
-                //rigidbody.AddForce(contact.normal  * 2);
-                
-            }
-
-
-        }
-
 
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "SolidBlock")
-        {
-            Rigidbody rigidbody = GetComponent<Rigidbody>();
-            rigidbody.isKinematic = false;
-
-            GetComponent<MeshRenderer>().material.color
-                   = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        }
+       
     }
 
 }

@@ -13,48 +13,38 @@ public class PlayerColorChanger : MonoBehaviour {
 	void Update () {
 		
 	}
-
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
-
         // 벽에 부딫힌 상태면 색상을 변경하자.
-        if (collision.gameObject.tag == "SolidBlock")
+        if (other.gameObject.tag == "SolidBlock")
         {
-            Material material = GetComponent<MeshRenderer>().material;
+            MeshRenderer mesh_renderer = GetComponentInParent<MeshRenderer>();
 
-            GetComponent<MeshRenderer>().material.color
-                = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+            mesh_renderer.material.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
         }
     }
 
-
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider other)
     {
 
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
 
-        if (collision.gameObject.tag == "SolidBlock")
+        if (other.gameObject.tag == "SolidBlock")
         {
-            Material material = GetComponent<MeshRenderer>().material;
+            MeshRenderer mesh_renderer = GetComponentInParent<MeshRenderer>();
 
-            GetComponent<MeshRenderer>().material.color
-               = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-
+            mesh_renderer.material.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+            Debug.Log("Act");
         }
-
-
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.tag == "SolidBlock")
+        if (other.gameObject.tag == "SolidBlock")
         {
-            Rigidbody rigidbody = GetComponent<Rigidbody>();
-            rigidbody.isKinematic = false;
 
-            GetComponent<MeshRenderer>().material.color
-                   = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+            MeshRenderer mesh_renderer = GetComponentInParent<MeshRenderer>();
+            mesh_renderer.material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
 }

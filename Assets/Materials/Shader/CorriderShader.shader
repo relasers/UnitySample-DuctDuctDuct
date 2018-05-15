@@ -7,7 +7,7 @@
 	}
 	SubShader {
 		
-		Tags{ "RenderType" = "opaque" "Queue" = "opaque" }
+		Tags{ "RenderType" = "opaque" }
 		//Tags{ "RenderType" = "opaque" }
 		//cull off
 

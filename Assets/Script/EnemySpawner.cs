@@ -70,8 +70,8 @@ public class EnemySpawner : MonoBehaviour {
             
 
             NewCube.transform.localScale *= 1.5f;
-            NewCube.GetComponent<Rotater>().ColorType = CubeColorType.RED;
-            NewCube.GetComponent<Rotater>().SetCubeColor();
+            NewCube.GetComponent<EnemyCubeBehavior>().ColorType = CubeColorType.RED;
+            NewCube.GetComponent<EnemyCubeBehavior>().SetCubeColor();
             
         }
 

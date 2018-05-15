@@ -4,12 +4,13 @@ using UnityEngine;
 
 
 
-public class Rotater : MonoBehaviour {
+public class EnemyCubeBehavior : MonoBehaviour {
 
     public CubeColorType ColorType;
 
     Vector3 MovingVector;
     GameObject Player;
+    
     public float MovingSpeed = 50.0f;
     public float RotateSpeed = 50.0f;
     

@@ -7,12 +7,17 @@ public class SpaceShipController : MonoBehaviour {
     public float speed = 150.0f;
     public bool isAlive = true;
 
+    public int ammo = 20;
+    public int missile_catridge = 0;
+
     public Camera camera;
 
     public Quaternion Initalized_rotation;
     public GameObject bullet;
+    public GameObject missile;
 
     bool canShoot = true;
+    bool canLaunch = true;
 
     IEnumerator ShootBullet(float delay)
     {
@@ -23,8 +28,17 @@ public class SpaceShipController : MonoBehaviour {
         canShoot = true;
     }
 
-    // Use this for initialization
-    void Start () {
+    IEnumerator LaunchMissile(float delay)
+    {
+        LaunchMissile();
+
+        canLaunch = false;
+        yield return new WaitForSeconds(delay);
+        canLaunch = true;
+    }
+
+        // Use this for initialization
+        void Start () {
         Initalized_rotation = transform.rotation;
         camera = GetComponentInChildren<Camera>();
 	}
@@ -78,19 +92,34 @@ public class SpaceShipController : MonoBehaviour {
         {
             if (canShoot)
             {
-                StartCoroutine(ShootBullet(1));
+                StartCoroutine(ShootBullet(0.5f));
             }
         }
 
-        
+        if (Input.GetKey(KeyCode.Z))
+        {
+            if (canShoot)
+            {
+                StartCoroutine(LaunchMissile(1));
+            }
+        }
+
+
 
     }
 
     void ShootBullet()
     {
-        GameObject newBullet = Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z) + transform.forward * 20, Quaternion.identity);
+        GameObject newBullet = Instantiate(bullet, new Vector3(transform.position.x, transform.position.y, transform.position.z) + transform.forward * 5, Quaternion.identity);
+        newBullet.transform.rotation = transform.rotation;
+        Rigidbody rigidbody = newBullet.GetComponent<Rigidbody>();
+        rigidbody.velocity = bullet.transform.forward*100;
     }
 
+    void LaunchMissile()
+    {
+        GameObject newMissile = Instantiate(missile, new Vector3(transform.position.x, transform.position.y, transform.position.z) + transform.forward * 5, Quaternion.identity);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {

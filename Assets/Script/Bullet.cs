@@ -4,42 +4,39 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
-    public float speed = 150.0f;
-    public float LifeTime = 1.5f;
-    IEnumerator SelfDestroy(float delay)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(delay);
-            Destroy(gameObject);
-        }
-    }
+    Vector3 Start_Position;
+    public float EffectiveRange = 100.0f; 
 
-    Coroutine deathTImer;
-	// Use this for initialization
-	void Start () {
-        deathTImer = StartCoroutine(SelfDestroy(LifeTime));
-
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
-
-        rigidbody.velocity = transform.forward * speed;
+    // Use this for initialization
+    void Start () {
+        Start_Position = transform.position;
 
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        transform.LookAt(transform.position + transform.forward);
+        // 사거리 체크 후 제거
+        if (Vector3.Distance(Start_Position, transform.position) > EffectiveRange)
+        {
+            Destroy(gameObject);
+        }
 
 	}
 
     private void OnCollisionEnter(Collision collision)
     {
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
-
-        if (collision.gameObject.tag == "SolidBlock")
+        if (collision.gameObject.tag == "Enemy")
         {
-            Destroy(gameObject);
+            if (collision.gameObject)
+            {
+                EnemyStat stat = collision.transform.GetComponent<EnemyStat>();
+                if(stat)
+                    stat.hp--;
+            }
+            
         }
+
+        Destroy(gameObject);
     }
 }

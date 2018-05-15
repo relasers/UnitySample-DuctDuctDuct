@@ -1,4 +1,4 @@
-﻿Shader "Custom/CorriderShader" {
+﻿Shader "Custom/CubeParticleShader" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
@@ -6,15 +6,12 @@
 		_Metallic ("Metallic", Range(0,1)) = 0.0
 	}
 	SubShader {
-		
-		Tags{ "RenderType" = "opaque" }
-		//cull off
-
+		Tags { "RenderType"="Opaque" }
 		LOD 200
 		
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard fullforwardshadows // alpha:fade
+		#pragma surface surf Standard fullforwardshadows
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
@@ -39,33 +36,17 @@
 		UNITY_INSTANCING_CBUFFER_END
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
-			// Albedo comes from a texture tinted by color
-
 			float rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
-			rim = pow(rim, 13);
+			rim = pow(rim, 15);
 
-			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-			
-			// 줄무늬 넓이를 조절하기 위한 주기
-			float frequency = 20 + (sin(_Time.y)*0.5) * 5;
-
-			c.rgb = ( sin(IN.uv_MainTex.y *360 *0.5) > 0) ?
-
-				// 가로줄이다.
-				 sin(IN.uv_MainTex.x * frequency + _Time.y * 5)*5*rim :
-
-				// 세로줄이다.
-				 cos(IN.uv_MainTex.y * (30) + _Time.y * 2)*20 - (1- rim)*20.5; 
-
-
-			
-
-			o.Albedo = c.rgba;
+			// Albedo comes from a texture tinted by color
+			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+			o.Albedo = c.rgb;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
-			//o.Alpha = c.a;
-			//o.Emission = c.b*rim*0.5;
+			o.Alpha = c.a;
+			o.Emission = c.rgb *(1- rim) + c.rgb*0.5;
 		}
 		ENDCG
 	}

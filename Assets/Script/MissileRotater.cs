@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletRotater : MonoBehaviour {
+public class MissileRotater : MonoBehaviour {
 
     public float RotateSpeed = 50.0f;
 

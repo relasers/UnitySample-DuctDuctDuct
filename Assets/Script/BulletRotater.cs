@@ -17,4 +17,13 @@ public class BulletRotater : MonoBehaviour {
         transform.Rotate(new Vector3(0,1,0),RotateSpeed);
 
 	}
+    private void OnDestroy()
+    {
+        TrailRenderer Trail = GetComponent<TrailRenderer>();
+
+        Trail.transform.parent = null;
+        Trail.autodestruct = true;
+        //Trail = null;
+
+    }
 }

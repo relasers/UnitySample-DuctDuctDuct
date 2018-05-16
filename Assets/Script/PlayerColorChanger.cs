@@ -30,7 +30,10 @@ public class PlayerColorChanger : MonoBehaviour {
         // 적 큐브가 내 뒤에 있으면 분홍색으로
         foreach (GameObject enemy in Enemies)
         {
-            if (player_spaceships_transform.position.z > enemy.transform.position.z)
+
+
+
+            if (Vector3.Dot(player_spaceships_transform.forward ,enemy.transform.position - player_spaceships_transform.position) < 0)
             {
                 Danger_is_Near = true;
                 

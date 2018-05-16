@@ -42,7 +42,7 @@ public class EnemySpawner : MonoBehaviour {
                  ),
                  Quaternion.identity
                 );
-           
+            NewCube.transform.localScale *= Random.Range(0.8f,1.2f);
 
             yield return new WaitForSeconds(delay);
         }
@@ -67,9 +67,9 @@ public class EnemySpawner : MonoBehaviour {
                  ),
                  Quaternion.identity
                 );
-            
 
-            NewCube.transform.localScale *= 1.5f;
+
+            NewCube.transform.localScale *= Random.Range(1.5f, 2.0f);
             NewCube.GetComponent<EnemyCubeBehavior>().ColorType = CubeColorType.RED;
             NewCube.GetComponent<EnemyCubeBehavior>().SetCubeColor();
             

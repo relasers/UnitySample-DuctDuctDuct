@@ -35,6 +35,23 @@ public class EnemyStat : MonoBehaviour {
 
             }
 
+            // 만약 내가 붉은 색이라면?
+            if (GetComponent<EnemyCubeBehavior>().ColorType == CubeColorType.RED)
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+                SpaceShipController controller;
+                if (player)
+                {
+                    controller = player.GetComponent<SpaceShipController>();
+
+                    if (controller)
+                        controller.missile_catridge++;
+                }
+
+                
+
+            }
 
             Destroy(gameObject);
         }

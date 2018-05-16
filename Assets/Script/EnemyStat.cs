@@ -5,6 +5,8 @@ using UnityEngine;
 public class EnemyStat : MonoBehaviour {
 
     public int hp = 1;
+    public bool AutoTargeted = false;
+
     public GameObject Particle;
     // Use this for initialization
     void Start () {
@@ -36,7 +38,11 @@ public class EnemyStat : MonoBehaviour {
             }
 
             // 만약 내가 붉은 색이라면?
-            if (GetComponent<EnemyCubeBehavior>().ColorType == CubeColorType.RED)
+            EnemyCubeBehavior cubeBehavior = GetComponent<EnemyCubeBehavior>();
+            
+
+            if(cubeBehavior)
+            if (cubeBehavior.ColorType == CubeColorType.RED)
             {
                 GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -45,6 +51,7 @@ public class EnemyStat : MonoBehaviour {
                 {
                     controller = player.GetComponent<SpaceShipController>();
 
+                    // 플레이어에게 아이템을 준다
                     if (controller)
                         controller.missile_catridge++;
                 }

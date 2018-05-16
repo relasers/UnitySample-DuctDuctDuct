@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour {
 
     public GameObject cube;
     public GameObject player;
+    public GameObject boss;
 
     public float spawn_delay = 1.0f;
     public float spawn_red_delay = 10.0f;
@@ -29,7 +30,7 @@ public class EnemySpawner : MonoBehaviour {
     IEnumerator SpawnEnemyCube(float delay)
     {
 
-        while (true)
+        while (true && boss)
         {
 
 
@@ -52,7 +53,7 @@ public class EnemySpawner : MonoBehaviour {
     IEnumerator SpawnEnemyRedCube(float delay)
     {
 
-        while (true)
+        while (true && boss)
         {
 
             yield return new WaitForSeconds(delay);

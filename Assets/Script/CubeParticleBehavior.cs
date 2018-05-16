@@ -6,7 +6,9 @@ public class CubeParticleBehavior : MonoBehaviour {
     public Vector3 random_direction;
     public float speed = 100;
     public float lifetime = 100;
+    public bool isActive = false;
     // Use this for initialization
+
     void Start () {
         Rigidbody rigidbody = GetComponent<Rigidbody>();
 
@@ -29,7 +31,10 @@ public class CubeParticleBehavior : MonoBehaviour {
 
         if (lifetime <= 0)
         {
+            isActive = false;
+
             Destroy(gameObject);
+
         }
 	}
 

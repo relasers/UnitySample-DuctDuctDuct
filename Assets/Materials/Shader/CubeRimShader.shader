@@ -4,6 +4,7 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
+		[MaterialToggle] _Emission("Emission", Float) = 0
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -27,7 +28,7 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
-
+		float _Emission;
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
 		// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
 		// #pragma instancing_options assumeuniformscaling
@@ -49,6 +50,9 @@
 			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
 			o.Emission = c.rgb * rim;
+
+			if (_Emission)
+				o.Emission = c.rgb;
 		}
 		ENDCG
 	}

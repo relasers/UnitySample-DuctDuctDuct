@@ -10,7 +10,9 @@ public class EnemyCubeBehavior : MonoBehaviour {
 
     Vector3 MovingVector;
     GameObject Player;
-    
+
+    Color baseColor;
+
     public float MovingSpeed = 50.0f;
     public float RotateSpeed = 50.0f;
     
@@ -90,6 +92,25 @@ public class EnemyCubeBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+
+        EnemyStat stat = GetComponent<EnemyStat>();
+
+        if (stat)
+        {
+            MeshRenderer renderer = GetComponent<MeshRenderer>();
+            if (stat.AutoTargeted)
+            {
+                renderer.material.SetFloat("_Emission", 1);
+                renderer.material.color = (float)(0.5+Mathf.Sin(Time.deltaTime)*0.5)* Color.white + baseColor;
+            }
+            else
+            {
+                renderer.material.SetFloat("_Emission", 0);
+                renderer.material.color = baseColor;
+            }
+
+        }
         
 
 
@@ -121,13 +142,6 @@ public class EnemyCubeBehavior : MonoBehaviour {
     private void OnCollisionStay(Collision collision)
     {
 
-      //  Rigidbody rigidbody = GetComponent<Rigidbody>();
-      //
-      //  if (collision.gameObject.tag == "SolidBlock")
-      //  {
-      //      rigidbody.velocity = MovingVector * Time.deltaTime * rigidbody.mass;
-      //
-      //  }
     }
 
     // 큐브의 색상을 결정한다.
@@ -164,6 +178,8 @@ public class EnemyCubeBehavior : MonoBehaviour {
             default:
                 break;
         }
+
+        baseColor = renderer.material.color;
 
     }
 

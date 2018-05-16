@@ -31,8 +31,11 @@ public class Bullet : MonoBehaviour {
             if (collision.gameObject)
             {
                 EnemyStat stat = collision.transform.GetComponent<EnemyStat>();
-                if(stat)
+                if (stat)
+                {
+                    stat.AutoTargeted = false;
                     stat.hp--;
+                }
             }
             
         }

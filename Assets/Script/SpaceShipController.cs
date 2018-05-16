@@ -17,15 +17,13 @@ public class SpaceShipController : MonoBehaviour {
     public Quaternion Initalized_rotation;
     public GameObject bullet;
     public GameObject missile;
+    public GameObject Particle;
 
     // 총구
     public GameObject barrel;
 
     // 마우스 움직임 민감도
     public float MouseSensitivity = 1.0f;
-    // 화면을 y축으로 홰까닥 돌려버리면 카메라 뷰가 하자를 일으킴
-    public float yAxisLimit_Max = 60.0f;
-    public float yAxisLimit_Min = -60.0f;
 
     public float AmmoRechargeDelay = 1.0f;
 
@@ -84,24 +82,29 @@ public class SpaceShipController : MonoBehaviour {
 
         Rigidbody rigidbody = GetComponent<Rigidbody>();
 
-        // 좌우 움직임
-        float translation_x = Mathf.Clamp(Input.GetAxis("Horizontal"), -1, 1) * speed * Time.fixedDeltaTime ;
-        // 위 아래 움직임
-        float translation_y = Mathf.Clamp(Input.GetAxis("HoverAxis"), -1, 1) * speed * Time.fixedDeltaTime;
-        // 정면 후면 움직임
-        float translation_z = Mathf.Clamp(Input.GetAxis("Vertical"), -1, 1) * speed * Time.fixedDeltaTime;
+        if (isAlive)
+        {
+            // 좌우 움직임
+            float translation_x = Mathf.Clamp(Input.GetAxis("Horizontal"), -1, 1) * speed * Time.fixedDeltaTime;
+            // 위 아래 움직임
+            float translation_y = Mathf.Clamp(Input.GetAxis("HoverAxis"), -1, 1) * speed * Time.fixedDeltaTime;
+            // 정면 후면 움직임
+            float translation_z = Mathf.Clamp(Input.GetAxis("Vertical"), -1, 1) * speed * Time.fixedDeltaTime;
 
-        
-        rigidbody.velocity = ( 
-            (transform.forward*translation_z +
-            transform.right * translation_x +
-            transform.up * translation_y
 
-            ) 
-            * rigidbody.mass);
+            rigidbody.velocity = (
+                (transform.forward * translation_z +
+                transform.right * translation_x +
+                transform.up * translation_y
 
-        // 전 후진에 따라 카메라 fov 값을 조절해 시야를 변화시킨다.
-        camera.fov = 60 - Mathf.Clamp(Input.GetAxis("Vertical") * 0.5f, -1, 1) * 20.0f;
+                )
+                * rigidbody.mass);
+
+            // 전 후진에 따라 카메라 fov 값을 조절해 시야를 변화시킨다.
+            camera.fov = 60 - Mathf.Clamp(Input.GetAxis("Vertical") * 0.5f, -1, 1) * 20.0f;
+
+        }
+
 
 
 
@@ -151,25 +154,25 @@ public class SpaceShipController : MonoBehaviour {
             RollMode = false;
         }
 
-
-        if (Input.GetKey(KeyCode.LeftControl))
+        if(isAlive)
         {
-            if (canShoot && ammo > 0 )
+            if (Input.GetKey(KeyCode.LeftControl))
             {
-                StartCoroutine(ShootBullet(0.25f));
+                if (canShoot && ammo > 0)
+                {
+                    StartCoroutine(ShootBullet(0.25f));
+                }
             }
-        }
 
-        if (Input.GetKey(KeyCode.Z))
-        {
-            if (canLaunch && missile_catridge > 0)
+            if (Input.GetKey(KeyCode.Z))
             {
-                StartCoroutine(LaunchMissile(1));
+                if (canLaunch && missile_catridge > 0)
+                {
+                    StartCoroutine(LaunchMissile(0.25f));
+                }
             }
+
         }
-
-
-
     }
 
     void ShootBullet()
@@ -178,7 +181,7 @@ public class SpaceShipController : MonoBehaviour {
         GameObject newBullet = Instantiate(bullet, new Vector3(barrel.transform.position.x, barrel.transform.position.y, barrel.transform.position.z), Quaternion.identity);
         newBullet.transform.LookAt(barrel.transform.position+ barrel.transform.forward);
         Rigidbody rigidbody = newBullet.GetComponent<Rigidbody>();
-        rigidbody.velocity = newBullet.transform.forward*100;
+        rigidbody.velocity = newBullet.transform.forward*200;
     }
 
     void LaunchMissile()
@@ -191,7 +194,63 @@ public class SpaceShipController : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-       
+        if (collision.transform.tag == "Enemy" || collision.transform.tag == "EnemyProjectile" && isAlive)
+        {
+            MeshRenderer renderer = GetComponentInChildren<MeshRenderer>();
+            renderer.enabled = false;
+            isAlive = false;
+
+
+            /////////////////////////////////////
+
+
+
+
+            for (int i = 0; i < 100; ++i)
+            {
+                GameObject NewParticle = Instantiate(Particle,
+                // 플레이어 전방 100미터
+                // 복도 내부 랜덤한 위치에서 생성
+                transform.position,
+                Quaternion.identity
+               );
+                transform.localScale = new Vector3(2, 2, 2);
+                // 본인 색깔의 파티클로.
+                MeshRenderer particles_meshRenderer = NewParticle.GetComponentInChildren<MeshRenderer>();
+
+                if (particles_meshRenderer)
+                    particles_meshRenderer.material.color = transform.GetComponentInChildren<MeshRenderer>().material.color;
+
+            }
+
+
+
+
+
+            //////////////////////////////
+
+
+
+
+
+
+
+
+            GameObject GameManager = GameObject.Find("GameManager");
+
+            if (GameManager)
+            {
+                GameController gamecontroller = GameManager.GetComponent<GameController>();
+
+                if (gamecontroller)
+                {
+                    gamecontroller.GameRestart();
+                }
+
+
+            }
+
+        }
     }
 
 
